@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Register</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f5f7fa;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    .register-container {
+      background: white;
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      width: 350px;
+    }
+
+    .register-container h2 {
+      margin-bottom: 1.5rem;
+      text-align: center;
+      color: #333;
+    }
+
+    .form-group {
+      margin-bottom: 1rem;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 0.5rem;
+      color: #555;
+    }
+
+    .form-group input {
+      width: 100%;
+      padding: 0.6rem;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+    }
+
+    .register-btn {
+      width: 100%;
+      padding: 0.7rem;
+      background: #28a745;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+
+    .register-btn:hover {
+      background: #218838;
+    }
+
+    .message {
+      margin-top: 1rem;
+      text-align: center;
+      color: red;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="register-container">
+    <h2>Register</h2>
+    <div class="form-group">
+      <label for="username">Username *</label>
+      <input type="text" id="username" placeholder="Enter username" required />
+    </div>
+    <div class="form-group">
+      <label for="fullname">Full Name</label>
+      <input type="text" id="fullname" placeholder="Enter full name (optional)" />
+    </div>
+    <div class="form-group">
+      <label for="email">Email *</label>
+      <input type="email" id="email" placeholder="Enter email" required />
+    </div>
+    <div class="form-group">
+      <label for="password">Password *</label>
+      <input type="password" id="password" placeholder="Enter password" required />
+    </div>
+    <button class="register-btn" onclick="handleRegister()">Register</button>
+    <div class="message" id="message"></div>
+
+    <div style="text-align: center; margin-top: 1rem;">
+      <a href="/login.html" style="color: #007bff; text-decoration: none;">Already have an account? Login here</a>
+    </div>
+
+  </div>
+
+  <script>
+    function isAlphanumeric(str) {
+      return /^[a-zA-Z0-9]+$/.test(str);
+    }
+
+    async function handleRegister() {
+      const username = document.getElementById("username").value.trim();
+      const fullname = document.getElementById("fullname").value.trim();
+      const email = document.getElementById("email").value.trim();
+      const password = document.getElementById("password").value;
+      const messageDiv = document.getElementById("message");
+      const backend_address = "https://wrtc.interwiz.ai";//"http://0.0.0.0:7860";
+
+      // Frontend validations
+      if (!username || !email || !password) {
+        messageDiv.innerText = "Please fill in all required fields.";
+        return;
+      }
+
+      if (password.length < 6 || !isAlphanumeric(password)) {
+        messageDiv.innerText = "Password must be at least 6 characters and alphanumeric.";
+        return;
+      }
+
+      const payload = {
+        username,
+        fullname: fullname || "",
+        email,
+        password
+      };
+
+      try {
+        const response = await fetch(backend_address + "/register", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        });
+
+        if (response.ok) {
+          messageDiv.style.color = "green";
+          messageDiv.innerText = "Registration successful!";
+        } else {
+          const errorData = await response.json();
+          messageDiv.innerText = errorData.detail || "Registration failed.";
+        }
+      } catch (error) {
+        messageDiv.innerText = "Error connecting to server.";
+      }
+    }
+  </script>
+
+</body>
+</html>
