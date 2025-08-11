@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Talk to Ava</title>
+    <link rel="stylesheet" href="/style.css" />
+  </head>
+
+  <body>
+    <div id="error-toast" class="toast"></div>
+
+    <div class="header-container">
+      <div class="logo">
+        <img
+          src="https://huggingface.co/datasets/freddyaboulton/bucket/resolve/main/Video%26Audio%20huggy.png"
+          alt="LLaMA Logo"
+        />
+      </div>
+      <div class="header">
+        <h1>Talk to Ava</h1>
+        <h2>Experience seamless real-time conversation thanks to FastRTC.</h2>
+      </div>
+    </div>
+
+    <div class="container">
+      <div class="chat-container" id="chat-messages">
+        <!-- Messages will appear here -->
+      </div>
+
+      <div class="typing-indicator" id="typing-indicator">
+        <div class="dots">
+          <div class="dot"></div>
+          <div class="dot"></div>
+          <div class="dot"></div>
+        </div>
+      </div>
+
+      <div class="wave-visualizer">
+        <div class="box-container" id="box-container">
+          <!-- Boxes will be dynamically added here -->
+        </div>
+      </div>
+
+      <div class="controls">
+        <button id="start-button">Start Conversation</button>
+      </div>
+
+      <label id="statusLabel">Status: Not Started</label>
+
+    </div>
+
+    <audio id="audio-output"></audio>
+
+    <!--script>
+      var config = __RTC_CONFIGURATION__;
+    </script-->
+
+
+    <script>
+      var config = {
+          iceServers: [
+                        { urls: "stun:stun.l.google.com:19302" },
+                        { urls: "stun:stun1.l.google.com:19302" },
+                        { urls: "stun:stun2.l.google.com:19302" },
+                        { urls: "stun:stun3.l.google.com:19302" },
+                        { urls: "stun:stun4.l.google.com:19302" }
+                      ]
+                  };
+    </script>
+
+    <!--script>
+      var config = {"iceServers":[{"urls":["stun:stun.cloudflare.com:3478","stun:stun.cloudflare.com:53"]},{"urls":["turn:turn.cloudflare.com:3478?transport=udp","turn:turn.cloudflare.com:3478?transport=tcp","turns:turn.cloudflare.com:5349?transport=tcp","turn:turn.cloudflare.com:53?transport=udp","turn:turn.cloudflare.com:80?transport=tcp","turns:turn.cloudflare.com:443?transport=tcp"],"username":"g04dda8f642b3c9912574828e1674788b6a9836a1ef9ecf2501f04abaf2c38a8","credential":"c0a4690c372c12a41ed6e32963182b405ff097b86420b00fd3cf676cdd56979b"}]};
+    </script-->
+
+    <!--script src="https://cdn.jsdelivr.net/npm/event-source-polyfill@1.0.20/eventsource.min.js"></script-->
+    <!--script src="https://unpkg.com/event-source-polyfill@1.0.12/dist/eventsource.min.js"></script-->
+    <!--script src="https://cdn.jsdelivr.net/npm/event-source-polyfill@1.0.12/dist/eventsource.min.js"></script-->
+    <!--script src="https://cdn.jsdelivr.net/npm/event-source-polyfill@1.0.12/src/eventsource.min.js"></script-->
+    <script src="/app.js"></script>
+
+  </body>
+</html>
