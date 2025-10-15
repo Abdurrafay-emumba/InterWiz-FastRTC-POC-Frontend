@@ -358,6 +358,17 @@ async function setupWebRTC()
     }
     await peerConnection.setRemoteDescription(serverResponse);
 
+
+    // Getting the interview ID from the URL parameters
+
+    const params = new URLSearchParams(window.location.search);
+
+    // Extract the specific parameter
+
+    const interviewId = params.get("interview_id");
+
+    console.log("Interview ID:", interviewId);
+
     eventSource = new EventSource(backend_address + "/outputs?webrtc_id=" + webrtc_id + "&interview_id=" + interviewId, { withCredentials: true } );
     /*
     eventSource = new EventSourcePolyfill("/outputs?webrtc_id=" + webrtc_id, {
