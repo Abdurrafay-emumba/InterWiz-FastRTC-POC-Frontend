@@ -358,7 +358,7 @@ async function setupWebRTC()
     }
     await peerConnection.setRemoteDescription(serverResponse);
 
-    eventSource = new EventSource(backend_address + "/outputs?webrtc_id=" + webrtc_id, { withCredentials: true } );
+    eventSource = new EventSource(backend_address + "/outputs?webrtc_id=" + webrtc_id + "&interview_id=" + interviewId, { withCredentials: true } );
     /*
     eventSource = new EventSourcePolyfill("/outputs?webrtc_id=" + webrtc_id, {
       withCredentials: true
@@ -573,7 +573,7 @@ async function RunSetupWebRTC()
     console.log("Start button clicked");
     let retryCount = 0;
     let connected = false
-    while (retryCount < 5 && !connected)
+    while (retryCount < 4 && !connected)
     {
       try
       {
@@ -598,6 +598,33 @@ async function RunSetupWebRTC()
         else
         {
             retryCount++;
+            const turnHost = "ec2-44-197-215-14.compute-1.amazonaws.com"//"ec2-16-171-208-195.eu-north-1.compute.amazonaws.com";
+
+            // The TURN credentials are static for demo purposes
+            // In production, you should hide them
+            if (retryCount === 3)
+            {
+                  console.log("STUN failed, changing to TURN");
+                  // config is a global variable, it is defined in the HTML file
+                  // Changing the config to use TURN server
+                  config =
+                  {
+                        iceServers: [
+                        {
+                            urls: [
+                            `turn:${turnHost}:3478?transport=udp`,
+                            `turn:${turnHost}:3478?transport=tcp`,
+                            ],
+                            username: "testuser",
+                            credential: "testpass",
+                        },
+                        // keep one STUN as fallback
+                        { urls: "stun:stun.l.google.com:19302" },
+                    ],
+                    // force TURN-only on this attempt
+                    iceTransportPolicy: "relay",
+                  };
+            }
         }
       }
       catch
